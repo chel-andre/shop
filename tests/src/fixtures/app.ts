@@ -5,15 +5,29 @@ import { LoginPage } from '../pageObjects/LoginPage';
 import { RegisterPage } from '../pageObjects/RegisterPage';
 
 export class App {
-    base: BasePage;
-    main: MainPage;
-    login: LoginPage;
-    register: RegisterPage;
+  base: BasePage;
+  main: MainPage;
+  login: LoginPage;
+  register: RegisterPage;
+  private page: Page;
 
-    constructor(page: Page) {
-        this.base = new BasePage(page);
-        this.main = new MainPage(page);
-        this.login = new LoginPage(page);
-        this.register = new RegisterPage(page);
-    }
+  constructor(page: Page) {
+    this.page = page;
+    this.base = new BasePage(page);
+    this.main = new MainPage(page);
+    this.login = new LoginPage(page);
+    this.register = new RegisterPage(page);
+  }
+
+  async goToMainPage() {
+    await this.page.goto('/dashboard');
+  }
+
+  async goToLogin() {
+    await this.page.goto('/');
+  }
+
+  async goToRegister() {
+    await this.page.goto('/register');
+  }
 }
