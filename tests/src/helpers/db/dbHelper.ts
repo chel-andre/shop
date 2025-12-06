@@ -1,9 +1,17 @@
-import { UserModel, IUser } from '../../models/User';
+import mongoose from 'mongoose';
+import { UserModel } from '../../models/User';
+import { connectDB } from './connectDB';
 
-export const createUser = async (username: string, password: string): Promise<IUser> => {
-  return await UserModel.create({ username, password });
+export const deleteUserByUsername = async (username: string) => {
+  if (mongoose.connection.readyState !== 1) {
+    await connectDB();
+  }
+  return await UserModel.deleteOne({ username });
 };
 
-export const deleteUserByUsername = async (username: string): Promise<{ deletedCount?: number }> => {
-  return await UserModel.deleteOne({ username });
+export const createUser = async (username: string, password: string) => {
+  if (mongoose.connection.readyState !== 1) {
+    await connectDB();
+  }
+  return await UserModel.create({ username, password });
 };

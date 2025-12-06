@@ -1,6 +1,6 @@
 import { test, expect } from '../src/fixtures/baseTest';
 import { generateRandomUsername, getRandomString } from '../src/helpers/random/randomDataHelper';
-import { deleteUserByUsername } from '../src/helpers/db/dbHelper';
+import { deleteUserByUsername  } from '../src/helpers/db/dbHelper';
 
 const registerSuccess = 'Registered Successfully.';
 const userExists = (username: string) => `UserName ${username} Already Exist!`;

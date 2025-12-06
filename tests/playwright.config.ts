@@ -1,8 +1,8 @@
-import { PlaywrightTestConfig, devices, defineConfig } from '@playwright/test';
+import { defineConfig, devices } from '@playwright/test';
 
-const config: PlaywrightTestConfig = defineConfig({
-  globalSetup: './src/helpers/db/globalSetup',
-  reporter: [['html', { outputFolder: 'playwright-report' }]],
+export default defineConfig({
+  globalSetup: require.resolve('./src/helpers/db/globalSetup'),
+  globalTeardown: require.resolve('./src/helpers/db/globalTeardown'),
   testMatch: 'tests/**/*.spec.ts',
   use: {
     headless: false,
@@ -15,16 +15,8 @@ const config: PlaywrightTestConfig = defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: {
-        ...devices['Desktop Chrome'],
-        launchOptions: {
-          args: ['--start-fullscreen'],
-        },
-      },
+      use: { ...devices['Desktop Chrome'] },
     },
   ],
   timeout: 120000,
-  retries: 0,
 });
-
-export default config;

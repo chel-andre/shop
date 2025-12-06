@@ -8,14 +8,14 @@ export class BasePage {
 
     constructor(page: Page) {
         this.page = page;
-        this.notificationText = page.locator('.swal-text');
-        this.notificationOkButton = page.locator('.swal-button--confirm');
-        this.notificationIcon = page.locator('.swal-icon');
+        this.notificationText = page.locator('.swal2-title');
+        this.notificationOkButton = page.locator('.swal2-confirm');
+        this.notificationIcon = page.locator('.swal2-icon');
     }
 
     async verifyNotification(expectedText: string, type: 'success' | 'error') {
         await expect(this.notificationText).toHaveText(expectedText);
-        await expect(this.notificationIcon).toHaveClass(new RegExp(`swal-icon--${type}`));
+        await expect(this.notificationIcon).toHaveClass(new RegExp(`swal2-${type}`));
     }
 
     async closeNotification() {
