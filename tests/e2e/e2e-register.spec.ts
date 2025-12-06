@@ -1,6 +1,6 @@
 import { test } from '../src/fixtures/baseTest';
 import { generateRandomUsername, getRandomString } from '../src/helpers/random/randomDataHelper';
-import { createUser, deleteUserByUsername } from '../src/helpers/db/dbHelper';
+import { dbHelper  } from '../src/helpers/db/dbHelper';
 
 const registerSuccess = 'Registered Successfully.';
 const userExists = (username: string) => `UserName ${username} Already Exist!`;
@@ -11,7 +11,7 @@ test.describe.parallel('Register Flow', () => {
 
   test.afterEach(async () => {
     if (username) {
-      await deleteUserByUsername(username);
+      await dbHelper.deleteUserByUsername(username);
     }
   });
 
@@ -28,7 +28,7 @@ test.describe.parallel('Register Flow', () => {
     username = generateRandomUsername();
     password = getRandomString();
 
-    await createUser(username, password);
+    await dbHelper.createUser(username, password);
 
     await app.goToRegister();
     await app.register.register(username, password);

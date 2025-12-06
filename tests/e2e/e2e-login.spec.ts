@@ -1,6 +1,6 @@
 import { test } from '../src/fixtures/baseTest';
 import { generateRandomUsername, getRandomString } from '../src/helpers/random/randomDataHelper';
-import { createUser, deleteUserByUsername } from '../src/helpers/db/dbHelper';
+import { dbHelper } from '../src/helpers/db/dbHelper';
 
 const loginSuccess = 'There is no product!';
 const invalidCredentials = 'Username or password is incorrect!';
@@ -12,12 +12,12 @@ test.describe.parallel('Login Flow', () => {
   test.beforeEach(async () => {
     username = generateRandomUsername();
     password = getRandomString();
-    await createUser(username, password);
+    await dbHelper.createUser(username, password);
   });
 
   test.afterEach(async () => {
     if (username) {
-      await deleteUserByUsername(username);
+      await dbHelper.deleteUserByUsername(username);
     }
   });
 
