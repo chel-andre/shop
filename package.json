@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/chel-andre/shop/issues"
   },
-  "homepage": "https://github.com/chel-andre/shop#readme"
+  "homepage": "https://github.com/chel-andre/shop#readme",
+  "dependencies": {
+    "concurrently": "^9.2.1"
+  }
 }
