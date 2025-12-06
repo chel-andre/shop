@@ -2,19 +2,21 @@ import { Page, Locator, expect } from '@playwright/test';
 
 export class BasePage {
     readonly page: Page;
-    readonly notificationText: Locator;
     readonly notificationOkButton: Locator;
     readonly notificationIcon: Locator;
+    readonly notificationPopup: Locator;
 
     constructor(page: Page) {
         this.page = page;
-        this.notificationText = page.locator('.swal2-title');
+        this.notificationPopup = page.locator('.swal2-popup');
         this.notificationOkButton = page.locator('.swal2-confirm');
         this.notificationIcon = page.locator('.swal2-icon');
     }
 
     async verifyNotification(expectedText: string, type: 'success' | 'error') {
-        await expect(this.notificationText).toHaveText(expectedText);
+        const textLocator = this.notificationPopup.locator(`:text-is("${expectedText}")`);
+        await textLocator.waitFor({ state: 'visible', timeout: 5000 });
+        await expect(textLocator).toHaveText(expectedText);
         await expect(this.notificationIcon).toHaveClass(new RegExp(`swal2-${type}`));
     }
 

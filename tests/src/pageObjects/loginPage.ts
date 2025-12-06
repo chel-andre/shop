@@ -1,7 +1,7 @@
-import { Page, Locator, expect } from '@playwright/test';
+import { Page, Locator } from '@playwright/test';
 
 export class LoginPage {
-    private readonly page: Page;
+    readonly page: Page;
 
     readonly usernameInput: Locator;
     readonly passwordInput: Locator;
@@ -13,8 +13,9 @@ export class LoginPage {
 
         this.usernameInput = page.locator('input[name="username"]');
         this.passwordInput = page.locator('input[name="password"]');
-        this.loginButton = page.locator('button:has-text("Login")');
-        this.registerLink = page.locator('button:has-text("Register")');
+
+        this.loginButton = page.locator('button', { hasText: 'Login' });
+        this.registerLink = page.locator('button', { hasText: 'Register' });
     }
 
     async fillUsername(username: string) {
