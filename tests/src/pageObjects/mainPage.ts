@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 
 export class MainPage {
     private readonly page: Page;
@@ -47,6 +47,7 @@ export class MainPage {
 
     async searchProduct(name: string) {
         await this.searchInput.fill(name);
+        await this.page.keyboard.press('Enter');
     }
 
     async clickPrint() {
@@ -68,4 +69,26 @@ export class MainPage {
     async goToPage(index: number) {
         await this.paginationPages.nth(index).click();
     }
+
+    async getRowByName(name: string): Promise<Locator> {
+        return this.page.locator(`table tbody tr:has(td:text("${name}"))`);
+    }
+
+async verifyProductRow(product: { name: string; desc: string; price: number; discount: number; }) {
+    const row = await this.getRowByName(product.name);
+    await expect(row).toHaveCount(1);
+
+    const cells = row.locator('td');
+    await expect(cells.nth(0)).toHaveText(product.name);
+
+    const img = cells.nth(1).locator('img');
+    await expect(img).toHaveCount(1);
+    await expect(img).toHaveAttribute('src', /.+/); 
+
+    await expect(cells.nth(2)).toHaveText(product.desc);
+    await expect(cells.nth(3)).toHaveText(String(product.price));
+    await expect(cells.nth(4)).toHaveText(String(product.discount));
+}
+
+
 }
