@@ -8,7 +8,7 @@ export default defineConfig({
     headless: false,
     viewport: { width: 1920, height: 1080 },
     ignoreHTTPSErrors: true,
-    baseURL: 'http://localhost:3000/',
+    baseURL: process.env.BASE_UI_URL,
     screenshot: 'only-on-failure',
     actionTimeout: 60000,
   },

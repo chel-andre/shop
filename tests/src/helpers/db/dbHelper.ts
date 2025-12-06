@@ -11,13 +11,15 @@ async function ensureConnection<T>(fn: () => Promise<T>): Promise<T> {
 }
 
 export const dbHelper = {
-  
   // ---------------- USERS ----------------
   createUser: (username: string, password: string): Promise<IUser> =>
     ensureConnection(() => UserModel.create({ username, password })),
 
   deleteUserByUsername: (username: string) =>
     ensureConnection(() => UserModel.deleteOne({ username })),
+
+  deleteUserById: (userId: string) =>
+    ensureConnection(() => UserModel.deleteOne({ _id: userId })),
 
   // ---------------- PRODUCTS ----------------
   createProduct: (data: {
