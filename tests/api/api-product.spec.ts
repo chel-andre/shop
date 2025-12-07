@@ -71,6 +71,25 @@ test.describe.parallel('API Product CRUD + Search + Pagination', () => {
     }
   });
 
+test('Create product with file upload', async ({ request }) => {
+  const response = await request.post(`${process.env.BASE_API_URL}/add-product`, {
+    multipart: {
+      name: 'TestProduct',
+      desc: 'Test description',
+      price: '100',
+      discount: '10',
+      file: fs.createReadStream(filePath),
+    },
+    headers: {
+      token,
+    },
+  });
+
+  const respBody = await response.json();
+  expect(response.status()).toBe(200);
+  expect(respBody.status).toBe(true);
+  expect(respBody.title).toBe('Product Added successfully.');
+});
 
   test('Get product', async ({ request }) => {
     const productData = generateProduct({ user_id: user._id });
