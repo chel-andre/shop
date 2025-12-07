@@ -80,9 +80,9 @@ export class MainPage {
     await expect(cells.nth(2)).toHaveText(product.desc);
     await expect(cells.nth(3)).toHaveText(String(product.price));
     await expect(cells.nth(4)).toHaveText(String(product.discount));
-}
+    }
 
-async verifyProductIsDeleted(productName: string) {
-  await expect(this.page.locator(`tr:has-text("${productName}")`)).toHaveCount(0);
+    async verifyProductIsDeleted(productName: string) {
+        await expect(this.page.locator(`tr:has-text("${productName}")`)).toHaveCount(0);
 }
 }

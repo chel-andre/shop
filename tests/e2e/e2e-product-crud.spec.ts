@@ -1,4 +1,4 @@
-import { test, expect } from '../src/fixtures/baseTest';
+import { test } from '../src/fixtures/baseTest';
 import {
   generateRandomUsername,
   getRandomString,
@@ -9,10 +9,49 @@ import { dbHelper } from '../src/helpers/db/dbHelper';
 import { login } from '../src/helpers/api/authHelper';
 import path from 'path';
 
-const loginSuccess = 'There is no product!';
-const productAddedSuccess = 'Product Added successfully.';
-const productUpdatedSuccess = 'Product updated.';
-const productDeletedSuccess = 'There is no product!';
+/* ----------------------------------------------------------
+ * CONSTANTS
+ * -------------------------------------------------------- */
+// Notification messages used across CRUD tests
+const MESSAGES = {
+  loginEmpty: 'There is no product!',
+  added: 'Product Added successfully.',
+  updated: 'Product updated.',
+  deleted: 'There is no product!'
+};
+
+// Path to example image for product creation and update
+const filePath = path.resolve(__dirname, '../assets/example.png');
+
+/* ----------------------------------------------------------
+ * HELPERS
+ * -------------------------------------------------------- */
+
+// Generates random product data with optional overrides
+function generateProduct(overrides: any = {}) {
+  return {
+    name: `Product ${getRandomString()}`,
+    desc: `Description ${getRandomString()}`,
+    price: getRandomNumber(500),
+    discount: getRandomNumber(50),
+    ...overrides
+  };
+}
+
+// Generates random updated product data for edit test
+function generateUpdatedProduct() {
+  return {
+    name: `Updated ${getRandomString()}`,
+    desc: `Updated ${getRandomString()}`,
+    price: getRandomNumber(500),
+    discount: getRandomNumber(50),
+    filePath
+  };
+}
+
+/* ----------------------------------------------------------
+ * TESTS
+ * -------------------------------------------------------- */
 
 test.describe.parallel('Product CRUD', () => {
   let username: string;
@@ -20,79 +59,93 @@ test.describe.parallel('Product CRUD', () => {
   let user: any;
 
   test.beforeEach(async ({ app, request, page }) => {
+    // Create unique user for test
     username = generateRandomUsername();
     password = getRandomString();
 
+    // Insert user into DB and perform UI login
     user = await dbHelper.createUser(username, password);
-
     await login(request, page, username, password);
+
+    // Go to dashboard where product grid is displayed
     await page.goto('/dashboard');
   });
 
   test.afterEach(async () => {
+    // Cleanup: remove created products and user
     if (user?._id) {
       await dbHelper.deleteProductsByUser(user._id.toString());
       await dbHelper.deleteUserById(user._id);
     }
   });
 
+  /* ----------------------------------------------------------
+   * CREATE PRODUCT
+   * -------------------------------------------------------- */
   test('Create Product', async ({ app }) => {
-    const productData = {
-      name: `Product ${getRandomString()}`,
-      desc: `Description ${getRandomString()}`,
-      price: getRandomNumber(500),
-      discount: getRandomNumber(50),
-      filePath: path.resolve(__dirname, '../assets/example.png')
-    };
+    // Prepare product payload with image path
+    const productData = generateProduct({ filePath });
 
-    await app.base.verifyAndCloseNotification(loginSuccess, 'error');
+    // First notification appears because list is empty
+    await app.base.verifyAndCloseNotification(MESSAGES.loginEmpty, 'error');
+
+    // Open modal and create product
     await app.main.clickAddProduct();
     await app.productModal.fillForm(productData);
-    await app.base.verifyAndCloseNotification(productAddedSuccess, 'success');
+
+    // Verify creation notification
+    await app.base.verifyAndCloseNotification(MESSAGES.added, 'success');
+
+    // Validate product row in table
     await app.main.verifyProductRow(productData);
   });
 
+  /* ----------------------------------------------------------
+   * EDIT PRODUCT
+   * -------------------------------------------------------- */
   test('Edit Product', async ({ app }) => {
-    const originalProduct = {
-      name: `Product ${getRandomString()}`,
-      desc: `Description ${getRandomString()}`,
-      price: getRandomNumber(500),
-      discount: getRandomNumber(50),
+    // Insert initial product directly in DB
+    const original = generateProduct({
       user_id: user._id,
       image: 'example.png'
-    };
+    });
+    await dbHelper.createProduct(original);
 
-    await dbHelper.createProduct(originalProduct);
+    // Prepare updated product values
+    const updated = generateUpdatedProduct();
 
-    const newProductData = {
-      name: `Updated ${getRandomString()}`,
-      desc: `Updated ${getRandomString()}`,
-      price: getRandomNumber(500),
-      discount: getRandomNumber(50),
-      filePath: path.resolve(__dirname, '../assets/example.png')
-    };
-
+    // Open edit modal for the first row and submit updated data
     await app.main.clickEditByRow(0);
-    await app.productModal.fillForm(newProductData);
-    await app.base.verifyAndCloseNotification(productUpdatedSuccess, 'success');
-    await app.main.verifyProductRow(newProductData);
-    await app.main.verifyProductIsDeleted(originalProduct.name);
+    await app.productModal.fillForm(updated);
+
+    // Verify update message
+    await app.base.verifyAndCloseNotification(MESSAGES.updated, 'success');
+
+    // Ensure row now shows updated product
+    await app.main.verifyProductRow(updated);
+
+    // Ensure original product data no longer present
+    await app.main.verifyProductIsDeleted(original.name);
   });
 
+  /* ----------------------------------------------------------
+   * DELETE PRODUCT
+   * -------------------------------------------------------- */
   test('Delete Product', async ({ app }) => {
-    const productData = {
-      name: `Product ${getRandomString()}`,
-      desc: `Description ${getRandomString()}`,
-      price: getRandomNumber(500),
-      discount: getRandomNumber(50),
+    // Insert initial product directly in DB
+    const productData = generateProduct({
       user_id: user._id,
       image: 'example.png'
-    };
+    });
+    const created = await dbHelper.createProduct(productData);
 
-    const createdProduct = await dbHelper.createProduct(productData);
+    // Delete product via UI
     await app.main.clickDeleteByRow(0);
-    await app.base.verifyAndCloseNotification(productDeletedSuccess, 'error');
-    await app.main.verifyProductIsDeleted(createdProduct.name);
-  });
 
+    // Verify notification after deletion
+    await app.base.verifyAndCloseNotification(MESSAGES.deleted, 'error');
+
+    // Ensure deleted product no longer exists in list
+    await app.main.verifyProductIsDeleted(created.name);
+  });
 });

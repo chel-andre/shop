@@ -22,10 +22,6 @@ export class App {
     this.productModal = new CreateEditProductModal(page);
   }
 
-  async goToMainPage() {
-    await this.page.goto('/dashboard');
-  }
-
   async goToLogin() {
     await this.page.goto('/');
   }
