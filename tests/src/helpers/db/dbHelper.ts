@@ -28,7 +28,7 @@ export const dbHelper = {
     price: number;
     discount: number;
     user_id: mongoose.Types.ObjectId;
-    image?: string;
+    image: string;
   }): Promise<IProduct> =>
     ensureConnection(() => ProductModel.create(data)),
 

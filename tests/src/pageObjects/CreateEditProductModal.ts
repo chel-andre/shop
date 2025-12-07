@@ -20,7 +20,8 @@ export class CreateEditProductModal {
         this.discountInput = page.locator('input[name="discount"]');
         this.uploadInput = page.locator('#fileInput');
         this.cancelButton = page.locator('button:has-text("Cancel")');
-        this.submitButton = page.locator('div[role="dialog"] >> button:has-text("Add Product")');
+        this.submitButton = page.locator('div[role="dialog"] button:has-text("Product")');
+
     }
 
     async fillForm(data: { name: string; desc: string; price: number; discount: number; filePath: string }) {

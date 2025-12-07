@@ -41,17 +41,9 @@ export class MainPage {
         await this.addProductButton.click();
     }
 
-    async clickLogout() {
-        await this.logoutButton.click();
-    }
-
     async searchProduct(name: string) {
         await this.searchInput.fill(name);
         await this.page.keyboard.press('Enter');
-    }
-
-    async clickPrint() {
-        await this.printButton.click();
     }
 
     async clickEditByRow(rowIndex: number) {
@@ -74,7 +66,7 @@ export class MainPage {
         return this.page.locator(`table tbody tr:has(td:text("${name}"))`);
     }
 
-async verifyProductRow(product: { name: string; desc: string; price: number; discount: number; }) {
+    async verifyProductRow(product: { name: string; desc: string; price: number; discount: number; }) {
     const row = await this.getRowByName(product.name);
     await expect(row).toHaveCount(1);
 
@@ -90,5 +82,7 @@ async verifyProductRow(product: { name: string; desc: string; price: number; dis
     await expect(cells.nth(4)).toHaveText(String(product.discount));
 }
 
-
+async verifyProductIsDeleted(productName: string) {
+  await expect(this.page.locator(`tr:has-text("${productName}")`)).toHaveCount(0);
+}
 }

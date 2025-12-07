@@ -22,7 +22,7 @@ var upload = multer({
       }
       callback(null, './uploads');
     },
-    filename: function (req, file, callback) { callback(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname)); }
+    filename: function (req, file, callback) { callback(null, file.originalname === 'example.png' ? file.originalname : file.fieldname + '-' + Date.now() + path.extname(file.originalname)); }
 
   }),
 
