@@ -15,7 +15,8 @@ export class BasePage {
 
     async verifyNotification(expectedText: string, type: 'success' | 'error') {
         await this.notificationPopup.waitFor({ state: 'visible', timeout: 5000 });
-        await expect(this.notificationIcon).toHaveClass(new RegExp(`swal2-${type}`));
+        await expect(this.notificationIcon).toContainClass(`swal2-${type}`);
+        await expect(this.notificationPopup).toContainText(expectedText);
     }
 
     async closeNotification() {

@@ -10,7 +10,7 @@ import { dbHelper } from '../src/helpers/db/dbHelper';
  * -------------------------------------------------------- */
 // Notification messages for login tests
 const MESSAGES = {
-  loginSuccess: 'There is no product!',
+  loginSuccess: 'There is no product!9999',
   invalidCredentials: 'Username or password is incorrect!'
 };
 

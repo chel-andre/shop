@@ -118,6 +118,6 @@ test('Create product with file upload', async ({ request }) => {
     const body = await response.json();
     expect(response.status()).toBe(200);
     expect(body.status).toBe(true);
-    expect(body.title).toBe('Product deleted.');
+    expect(body.title).toBe('Product deleted.99999999999999');
   });
 });
