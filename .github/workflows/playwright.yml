@@ -87,6 +87,7 @@ jobs:
 
       # 12. Upload HTML report
       - name: Upload HTML report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-html-report
@@ -95,6 +96,7 @@ jobs:
 
       # 13. Upload JUnit report
       - name: Upload JUnit report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: junit-report
@@ -103,6 +105,7 @@ jobs:
 
       # 14. Upload screenshots, videos, traces
       - name: Upload test artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-artifacts
