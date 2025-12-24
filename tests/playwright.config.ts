@@ -20,7 +20,7 @@ export default defineConfig({
 
   // Shared test options
   use: {
-    headless: false,                     // run tests with browser UI visible
+    headless: true,                     // run tests with browser UI visible
     viewport: { width: 1920, height: 1080 },
     ignoreHTTPSErrors: true,             // ignore SSL certificate errors
     baseURL: process.env.BASE_UI_URL,    // base URL for relative page.goto calls
