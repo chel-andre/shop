@@ -28,41 +28,64 @@ jobs:
         with:
           node-version: 20
 
-      # 3. Install dependencies for backend, frontend, tests
-      - name: Install dependencies
-        run: npm run install-all
+      # 3. Install dependencies for backend
+      - name: Install backend dependencies
+        working-directory: ./backend
+        run: npm install
 
-      # 4. Install Playwright browsers
+      # 4. Install dependencies for frontend
+      - name: Install frontend dependencies
+        working-directory: ./frontend
+        run: npm install
+
+      # 5. Install dependencies for tests
+      - name: Install test dependencies
+        working-directory: ./tests
+        run: npm install
+
+      # 6. Install Playwright browsers
       - name: Install Playwright browsers
         working-directory: ./tests
         run: npx playwright install --with-deps
 
-      # 5. Start backend + frontend
-      - name: Start backend and frontend
-        run: |
-          cd backend && npm run start &
-          cd ../frontend && npm run start &
+      # 7. Start backend
+      - name: Start backend
+        working-directory: ./backend
+        run: npm run start &
         env:
           MONGOOSE_CONNECTION_STRING: mongodb://localhost:27017/productDB
           SECRET_KEY: supersecret
           NODE_ENV: test
 
-      # 6. Wait until backend is ready
+      # 8. Wait for backend
       - name: Wait for backend
         uses: iFaxity/wait-on-action@v1.2.1
         with:
           resource: http://localhost:2000
 
-      # 7. Run Playwright tests
+      # 9. Start frontend
+      - name: Start frontend
+        working-directory: ./frontend
+        run: npm run start &
+        env:
+          NODE_ENV: test
+
+      # 10. Wait for frontend
+      - name: Wait for frontend
+        uses: iFaxity/wait-on-action@v1.2.1
+        with:
+          resource: http://localhost:3000
+
+      # 11. Run Playwright tests
       - name: Run Playwright tests
         working-directory: ./tests
         env:
           BASE_UI_URL: http://localhost:3000
           BASE_API_URL: http://localhost:2000
           MONGOOSE_CONNECTION_STRING: mongodb://localhost:27017/productDB
-        run: npx playwright test --reporter=list,html,junit
+        run: npx playwright test --headed=false --reporter=list,html,junit
 
-      # 8. Upload HTML report
+      # 12. Upload HTML report
       - name: Upload HTML report
         uses: actions/upload-artifact@v4
         with:
@@ -70,7 +93,7 @@ jobs:
           path: tests/playwright-report
           retention-days: 30
 
-      # 9. Upload JUnit report
+      # 13. Upload JUnit report
       - name: Upload JUnit report
         uses: actions/upload-artifact@v4
         with:
@@ -78,7 +101,7 @@ jobs:
           path: tests/results/junit.xml
           retention-days: 30
 
-      # 10. Upload screenshots, videos, traces
+      # 14. Upload screenshots, videos, traces
       - name: Upload test artifacts
         uses: actions/upload-artifact@v4
         with:
