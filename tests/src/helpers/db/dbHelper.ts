@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { connectDB } from './connectDB';
+import { connectDB } from './connectDb';
 import { UserModel, IUser } from '../../models/User';
 import { ProductModel, IProduct } from '../../models/Product';
 
