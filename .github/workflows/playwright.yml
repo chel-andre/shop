@@ -83,7 +83,7 @@ jobs:
           BASE_UI_URL: http://localhost:3000
           BASE_API_URL: http://localhost:2000
           MONGOOSE_CONNECTION_STRING: mongodb://localhost:27017/productDB
-        run: npx playwright test --headed=false --reporter=list,html,junit
+        run: npx playwright test --reporter=list,html,junit
 
       # 12. Upload HTML report
       - name: Upload HTML report
