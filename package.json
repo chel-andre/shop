@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "dev": "concurrently \"cd backend && npm run start\" \"cd frontend && npm run start\"",
-    "install-all": "cd backend && npm ci && cd ../frontend && npm ci && cd ../tests && npm ci"
+    "install-all": "cd backend && npm ci && cd ../frontend && npm ci && cd ../tests && npm ci",
+    "lint": "eslint backend frontend tests",
+    "lint:fix": "eslint backend frontend tests --fix",
+    "format": "prettier --write backend frontend tests"
   },
   "repository": {
     "type": "git",
@@ -19,5 +22,14 @@
   "homepage": "https://github.com/chel-andre/shop#readme",
   "dependencies": {
     "concurrently": "^9.2.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "@typescript-eslint/eslint-plugin": "^8.50.1",
+    "@typescript-eslint/parser": "^8.50.1",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "prettier": "^3.7.4"
   }
 }

@@ -2,7 +2,7 @@ import { test } from '../src/fixtures/baseTest';
 import {
   generateRandomUsername,
   getRandomString,
-  getRandomNumber
+  getRandomNumber,
 } from '../src/helpers/random/randomDataHelper';
 
 import { dbHelper } from '../src/helpers/db/dbHelper';
@@ -17,7 +17,7 @@ const MESSAGES = {
   loginEmpty: 'There is no product!',
   added: 'Product Added successfully.',
   updated: 'Product updated.',
-  deleted: 'There is no product!'
+  deleted: 'There is no product!',
 };
 
 // Path to example image for product creation and update
@@ -34,7 +34,7 @@ function generateProduct(overrides: any = {}) {
     desc: `Description ${getRandomString()}`,
     price: getRandomNumber(500),
     discount: getRandomNumber(50),
-    ...overrides
+    ...overrides,
   };
 }
 
@@ -45,7 +45,7 @@ function generateUpdatedProduct() {
     desc: `Updated ${getRandomString()}`,
     price: getRandomNumber(500),
     discount: getRandomNumber(50),
-    filePath
+    filePath,
   };
 }
 
@@ -107,7 +107,7 @@ test.describe.parallel('Product CRUD', () => {
     // Insert initial product directly in DB
     const original = generateProduct({
       user_id: user._id,
-      image: 'example.png'
+      image: 'example.png',
     });
     await dbHelper.createProduct(original);
 
@@ -135,7 +135,7 @@ test.describe.parallel('Product CRUD', () => {
     // Insert initial product directly in DB
     const productData = generateProduct({
       user_id: user._id,
-      image: 'example.png'
+      image: 'example.png',
     });
     const created = await dbHelper.createProduct(productData);
 

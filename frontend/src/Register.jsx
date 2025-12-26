@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import Swal from "sweetalert2";
-import { Button, TextField, Link } from "@mui/material";
-import { withRouter } from "./utils";
-import axios from "axios";
+import React, { Component } from 'react';
+import Swal from 'sweetalert2';
+import { Button, TextField, Link } from '@mui/material';
+import { withRouter } from './utils';
+import axios from 'axios';
 
 class Register extends Component {
   constructor(props) {
@@ -10,7 +10,7 @@ class Register extends Component {
     this.state = {
       username: '',
       password: '',
-      confirm_password: ''
+      confirm_password: '',
     };
   }
 
@@ -24,21 +24,22 @@ class Register extends Component {
       return;
     }
 
-    axios.post('http://localhost:2000/register', { username, password })
+    axios
+      .post('http://localhost:2000/register', { username, password })
       .then((res) => {
         Swal.fire({
           title: res.data.title,
-          icon: "success"
+          icon: 'success',
         });
-        this.props.navigate("/");
+        this.props.navigate('/');
       })
       .catch((err) => {
         Swal.fire({
-          title: err.response?.data?.errorMessage || "Registration failed",
-          icon: "error"
+          title: err.response?.data?.errorMessage || 'Registration failed',
+          icon: 'error',
         });
       });
-  }
+  };
 
   render() {
     const { username, password, confirm_password } = this.state;
@@ -57,7 +58,8 @@ class Register extends Component {
           required
           variant="outlined"
           margin="normal"
-        /><br />
+        />
+        <br />
 
         <TextField
           type="password"
@@ -69,7 +71,8 @@ class Register extends Component {
           required
           variant="outlined"
           margin="normal"
-        /><br />
+        />
+        <br />
 
         <TextField
           type="password"
@@ -81,7 +84,8 @@ class Register extends Component {
           required
           variant="outlined"
           margin="normal"
-        /><br />
+        />
+        <br />
 
         <Button
           variant="contained"
@@ -97,8 +101,8 @@ class Register extends Component {
         <Link
           component="button"
           underline="none"
-          sx={{ fontFamily: "inherit", fontSize: "inherit" }}
-          onClick={() => this.props.navigate("/")}
+          sx={{ fontFamily: 'inherit', fontSize: 'inherit' }}
+          onClick={() => this.props.navigate('/')}
         >
           Login
         </Link>

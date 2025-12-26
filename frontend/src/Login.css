@@ -3,8 +3,10 @@ body {
   font-family: 'Roboto', sans-serif;
 }
 
-@media print { 
-  .no-printme  { display: none !important;}
+@media print {
+  .no-printme {
+    display: none !important;
+  }
 }
 
 .button_style {
@@ -17,5 +19,5 @@ body {
 }
 
 h2 {
-    color: #3f51b5;
+  color: #3f51b5;
 }

@@ -1,8 +1,5 @@
 import { test } from '../src/fixtures/baseTest';
-import {
-  generateRandomUsername,
-  getRandomString
-} from '../src/helpers/random/randomDataHelper';
+import { generateRandomUsername, getRandomString } from '../src/helpers/random/randomDataHelper';
 import { dbHelper } from '../src/helpers/db/dbHelper';
 
 /* ----------------------------------------------------------
@@ -11,7 +8,7 @@ import { dbHelper } from '../src/helpers/db/dbHelper';
 // Notification messages for registration tests
 const MESSAGES = {
   registerSuccess: 'Registered Successfully.',
-  userExists: (username: string) => `UserName ${username} Already Exist!`
+  userExists: (username: string) => `UserName ${username} Already Exist!`,
 };
 
 /* ----------------------------------------------------------

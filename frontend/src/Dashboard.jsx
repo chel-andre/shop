@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Button,
   TextField,
@@ -13,28 +13,28 @@ import {
   TableHead,
   TableRow,
   TableCell,
-} from "@mui/material";
-import Pagination from "@mui/material/Pagination";
-import Swal from "sweetalert2";
-import axios from "axios";
-import { withRouter } from "./utils";
+} from '@mui/material';
+import Pagination from '@mui/material/Pagination';
+import Swal from 'sweetalert2';
+import axios from 'axios';
+import { withRouter } from './utils';
 
 class Dashboard extends Component {
   constructor() {
     super();
     this.state = {
-      token: "",
+      token: '',
       openProductModal: false,
       openProductEditModal: false,
-      id: "",
-      name: "",
-      desc: "",
-      price: "",
-      discount: "",
-      file: "",
-      fileName: "",
+      id: '',
+      name: '',
+      desc: '',
+      price: '',
+      discount: '',
+      file: '',
+      fileName: '',
       page: 1,
-      search: "",
+      search: '',
       products: [],
       pages: 0,
       loading: false,
@@ -42,10 +42,10 @@ class Dashboard extends Component {
   }
 
   componentDidMount = () => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
 
     if (!token) {
-      this.props.navigate("/login");
+      this.props.navigate('/login');
     } else {
       this.setState({ token }, () => this.getProduct());
     }
@@ -72,8 +72,8 @@ class Dashboard extends Component {
       })
       .catch((err) => {
         Swal.fire({
-          text: err?.response?.data?.errorMessage || "Error",
-          icon: "error",
+          text: err?.response?.data?.errorMessage || 'Error',
+          icon: 'error',
         });
         this.setState({ loading: false, products: [], pages: 0 });
       });
@@ -82,27 +82,27 @@ class Dashboard extends Component {
   deleteProduct = (id) => {
     axios
       .post(
-        "http://localhost:2000/delete-product",
+        'http://localhost:2000/delete-product',
         { id },
         {
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             token: this.state.token,
           },
-        }
+        },
       )
       .then((res) => {
         Swal.fire({
           text: res.data.title,
-          icon: "success",
+          icon: 'success',
         });
 
         this.setState({ page: 1 }, () => this.pageChange(null, 1));
       })
       .catch((err) => {
         Swal.fire({
-          text: err?.response?.data?.errorMessage || "Error",
-          icon: "error",
+          text: err?.response?.data?.errorMessage || 'Error',
+          icon: 'error',
         });
       });
   };
@@ -112,8 +112,8 @@ class Dashboard extends Component {
   };
 
   logOut = () => {
-    localStorage.setItem("token", "");
-    this.props.navigate("/");
+    localStorage.setItem('token', '');
+    this.props.navigate('/');
   };
 
   onChange = (e) => {
@@ -122,87 +122,84 @@ class Dashboard extends Component {
     }
 
     this.setState({ [e.target.name]: e.target.value }, () => {
-      if (e.target.name === "search") {
+      if (e.target.name === 'search') {
         this.setState({ page: 1 }, this.getProduct);
       }
     });
   };
 
   addProduct = () => {
-    const fileInput = document.querySelector("#fileInput");
+    const fileInput = document.querySelector('#fileInput');
     const formData = new FormData();
 
-    formData.append("file", fileInput.files[0]);
-    formData.append("name", this.state.name);
-    formData.append("desc", this.state.desc);
-    formData.append("discount", this.state.discount);
-    formData.append("price", this.state.price);
+    formData.append('file', fileInput.files[0]);
+    formData.append('name', this.state.name);
+    formData.append('desc', this.state.desc);
+    formData.append('discount', this.state.discount);
+    formData.append('price', this.state.price);
 
     axios
-      .post("http://localhost:2000/add-product", formData, {
+      .post('http://localhost:2000/add-product', formData, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          'Content-Type': 'multipart/form-data',
           token: this.state.token,
         },
       })
       .then((res) => {
-        Swal.fire({ text: res.data.title, icon: "success" });
+        Swal.fire({ text: res.data.title, icon: 'success' });
 
         this.handleProductClose();
         this.setState(
           {
-            name: "",
-            desc: "",
-            discount: "",
-            price: "",
+            name: '',
+            desc: '',
+            discount: '',
+            price: '',
             file: null,
             page: 1,
           },
-          this.getProduct
+          this.getProduct,
         );
       })
       .catch((err) => {
         Swal.fire({
-          text: err?.response?.data?.errorMessage || "Error",
-          icon: "error",
+          text: err?.response?.data?.errorMessage || 'Error',
+          icon: 'error',
         });
         this.handleProductClose();
       });
   };
 
   updateProduct = () => {
-    const fileInput = document.querySelector("#fileInput");
+    const fileInput = document.querySelector('#fileInput');
     const formData = new FormData();
 
-    formData.append("id", this.state.id);
+    formData.append('id', this.state.id);
     if (fileInput.files[0]) {
-      formData.append("file", fileInput.files[0]);
+      formData.append('file', fileInput.files[0]);
     }
-    formData.append("name", this.state.name);
-    formData.append("desc", this.state.desc);
-    formData.append("discount", this.state.discount);
-    formData.append("price", this.state.price);
+    formData.append('name', this.state.name);
+    formData.append('desc', this.state.desc);
+    formData.append('discount', this.state.discount);
+    formData.append('price', this.state.price);
 
     axios
-      .post("http://localhost:2000/update-product", formData, {
+      .post('http://localhost:2000/update-product', formData, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          'Content-Type': 'multipart/form-data',
           token: this.state.token,
         },
       })
       .then((res) => {
-        Swal.fire({ text: res.data.title, icon: "success" });
+        Swal.fire({ text: res.data.title, icon: 'success' });
 
         this.handleProductEditClose();
-        this.setState(
-          { name: "", desc: "", discount: "", price: "", file: null },
-          this.getProduct
-        );
+        this.setState({ name: '', desc: '', discount: '', price: '', file: null }, this.getProduct);
       })
       .catch((err) => {
         Swal.fire({
-          text: err?.response?.data?.errorMessage || "Error",
-          icon: "error",
+          text: err?.response?.data?.errorMessage || 'Error',
+          icon: 'error',
         });
         this.handleProductEditClose();
       });
@@ -211,12 +208,12 @@ class Dashboard extends Component {
   handleProductOpen = () => {
     this.setState({
       openProductModal: true,
-      id: "",
-      name: "",
-      desc: "",
-      price: "",
-      discount: "",
-      fileName: "",
+      id: '',
+      name: '',
+      desc: '',
+      price: '',
+      discount: '',
+      fileName: '',
     });
   };
 
@@ -248,12 +245,7 @@ class Dashboard extends Component {
         <div className="no-printme">
           <h2>Dashboard</h2>
 
-          <Button
-            variant="contained"
-            color="primary"
-            size="small"
-            onClick={this.handleProductOpen}
-          >
+          <Button variant="contained" color="primary" size="small" onClick={this.handleProductOpen}>
             Add Product
           </Button>
 
@@ -305,13 +297,7 @@ class Dashboard extends Component {
             <br />
             <Button variant="contained" component="label">
               Upload
-              <input
-                type="file"
-                accept="image/*"
-                onChange={this.onChange}
-                id="fileInput"
-                hidden
-              />
+              <input type="file" accept="image/*" onChange={this.onChange} id="fileInput" hidden />
             </Button>
             &nbsp;{this.state.fileName}
           </DialogContent>
@@ -320,10 +306,7 @@ class Dashboard extends Component {
             <Button onClick={this.handleProductEditClose}>Cancel</Button>
             <Button
               disabled={
-                !this.state.name ||
-                !this.state.desc ||
-                !this.state.discount ||
-                !this.state.price
+                !this.state.name || !this.state.desc || !this.state.discount || !this.state.price
               }
               onClick={this.updateProduct}
             >
@@ -372,7 +355,6 @@ class Dashboard extends Component {
               fullWidth
               margin="dense"
             />
-
             <br />
             <Button variant="contained" component="label">
               Upload
@@ -414,15 +396,11 @@ class Dashboard extends Component {
             value={this.state.search}
             onChange={this.onChange}
             placeholder="Search by product name"
-            style={{ width: "190px" }}
+            style={{ width: '190px' }}
             margin="dense"
           />
 
-          <Button
-            variant="outlined"
-            size="small"
-            onClick={() => window.print()}
-          >
+          <Button variant="outlined" size="small" onClick={() => window.print()}>
             Print product details
           </Button>
 
@@ -445,11 +423,7 @@ class Dashboard extends Component {
                 <TableRow key={row._id}>
                   <TableCell align="center">{row.name}</TableCell>
                   <TableCell align="center">
-                    <img
-                      src={`http://localhost:2000/${row.image}`}
-                      width="70"
-                      height="70"
-                    />
+                    <img src={`http://localhost:2000/${row.image}`} width="70" height="70" />
                   </TableCell>
                   <TableCell align="center">{row.desc}</TableCell>
                   <TableCell align="center">{row.price}</TableCell>

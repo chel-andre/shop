@@ -19,7 +19,7 @@ const MESSAGES = {
   registerSuccess: 'Registered Successfully.',
   userExists: (username: string) => `UserName ${username} Already Exist!`,
   loginSuccess: 'Login Successfully.',
-  invalidCredentials: 'Username or password is incorrect!'
+  invalidCredentials: 'Username or password is incorrect!',
 };
 
 /* ----------------------------------------------------------
@@ -46,7 +46,7 @@ test.describe.parallel('API Register + Login Flow', () => {
     // Register user with plain password
     const registerRes = await request.post(`${process.env.BASE_API_URL}/register`, {
       data: { username, password },
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'application/json' },
     });
 
     const registerBody = await registerRes.json();
@@ -58,7 +58,7 @@ test.describe.parallel('API Register + Login Flow', () => {
     const hashedPassword = getPassword(password);
     const loginRes = await request.post(`${process.env.BASE_API_URL}/login`, {
       data: { username, password: hashedPassword },
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'application/json' },
     });
 
     const loginBody = await loginRes.json();
@@ -79,7 +79,7 @@ test.describe.parallel('API Register + Login Flow', () => {
 
     const res = await request.post(`${process.env.BASE_API_URL}/register`, {
       data: { username, password },
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'application/json' },
     });
 
     const body = await res.json();
@@ -100,7 +100,7 @@ test.describe.parallel('API Register + Login Flow', () => {
     const hashedWrongPassword = getPassword(password + 'wrong');
     const res = await request.post(`${process.env.BASE_API_URL}/login`, {
       data: { username, password: hashedWrongPassword },
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'application/json' },
     });
 
     const body = await res.json();

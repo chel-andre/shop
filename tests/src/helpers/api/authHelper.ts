@@ -7,7 +7,12 @@ export const getPassword = (password: string) => {
   return hashedPassword;
 };
 
-export async function login(request: APIRequestContext, page: Page, username: string, password: string) {
+export async function login(
+  request: APIRequestContext,
+  page: Page,
+  username: string,
+  password: string,
+) {
   const response = await request.post(`${process.env.BASE_API_URL}/login`, {
     data: { username, password: getPassword(password) },
     headers: { 'Content-Type': 'application/json' },

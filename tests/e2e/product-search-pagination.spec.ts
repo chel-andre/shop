@@ -2,7 +2,7 @@ import { test } from '../src/fixtures/baseTest';
 import {
   generateRandomUsername,
   getRandomString,
-  getRandomNumber
+  getRandomNumber,
 } from '../src/helpers/random/randomDataHelper';
 
 import { dbHelper } from '../src/helpers/db/dbHelper';
@@ -20,7 +20,7 @@ function generateProduct(overrides: any = {}) {
     desc: `Desc_${getRandomString()}`,
     price: getRandomNumber(500),
     discount: getRandomNumber(50),
-    ...overrides
+    ...overrides,
   };
 }
 
@@ -65,7 +65,7 @@ test.describe.parallel('Product Search & Pagination', () => {
       const p = generateProduct({
         user_id: user._id,
         image: 'example.png',
-        name: `Item_${i}_${getRandomString()}`
+        name: `Item_${i}_${getRandomString()}`,
       });
 
       await dbHelper.createProduct(p);

@@ -1,8 +1,5 @@
 import { test } from '../src/fixtures/baseTest';
-import {
-  generateRandomUsername,
-  getRandomString
-} from '../src/helpers/random/randomDataHelper';
+import { generateRandomUsername, getRandomString } from '../src/helpers/random/randomDataHelper';
 import { dbHelper } from '../src/helpers/db/dbHelper';
 
 /* ----------------------------------------------------------
@@ -11,7 +8,7 @@ import { dbHelper } from '../src/helpers/db/dbHelper';
 // Notification messages for login tests
 const MESSAGES = {
   loginSuccess: 'There is no product!9999',
-  invalidCredentials: 'Username or password is incorrect!'
+  invalidCredentials: 'Username or password is incorrect!',
 };
 
 /* ----------------------------------------------------------

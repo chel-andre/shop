@@ -1,0 +1,107 @@
+const js = require('@eslint/js');
+const tseslint = require('@typescript-eslint/eslint-plugin');
+const tsParser = require('@typescript-eslint/parser');
+
+module.exports = [
+  {
+    ignores: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/build/**',
+      '**/coverage/**',
+      '**/assets/**',
+      '**/*.json',
+      'tests/playwright-report/**',
+    ],
+  },
+
+  // Backend (Node.js)
+  {
+    files: ['backend/**/*.{js,ts}'],
+    languageOptions: {
+      parser: tsParser,
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: {
+        require: 'readonly',
+        module: 'readonly',
+        __dirname: 'readonly',
+        __filename: 'readonly',
+        process: 'readonly',
+        Buffer: 'readonly',
+        console: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
+        setInterval: 'readonly',
+        clearInterval: 'readonly',
+      },
+    },
+    plugins: { '@typescript-eslint': tseslint },
+    rules: {
+      ...js.configs.recommended.rules,
+      ...tseslint.configs.recommended.rules,
+      '@typescript-eslint/no-require-imports': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-expressions': 'off',
+      'no-console': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
+  },
+
+  // Frontend + Tests
+  {
+    files: ['frontend/**/*.{js,ts,tsx}', 'tests/**/*.{js,ts,tsx}'],
+    languageOptions: {
+      parser: tsParser,
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: {
+        window: 'readonly',
+        document: 'readonly',
+        navigator: 'readonly',
+        fetch: 'readonly',
+        Response: 'readonly',
+        Blob: 'readonly',
+        Headers: 'readonly',
+        FileReader: 'readonly',
+        URL: 'readonly',
+        URLSearchParams: 'readonly',
+        TextEncoder: 'readonly',
+        TextDecoder: 'readonly',
+        self: 'readonly',
+        atob: 'readonly',
+        btoa: 'readonly',
+        localStorage: 'readonly',
+        Worker: 'readonly',
+        CompressionStream: 'readonly',
+        DecompressionStream: 'readonly',
+        TransformStream: 'readonly',
+        WritableStream: 'readonly',
+        ReadableStream: 'readonly',
+        location: 'readonly',
+        crypto: 'readonly',
+        HTMLElement: 'readonly',
+        CSSStyleSheet: 'readonly',
+        console: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
+        setInterval: 'readonly',
+        clearInterval: 'readonly',
+        process: 'readonly',
+        __dirname: 'readonly', 
+        require: 'readonly',   
+        module: 'readonly',
+      },
+    },
+    plugins: { '@typescript-eslint': tseslint },
+    rules: {
+      ...js.configs.recommended.rules,
+      ...tseslint.configs.recommended.rules,
+      '@typescript-eslint/no-require-imports': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-expressions': 'off',
+      'no-console': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
+  },
+];

@@ -20,26 +20,24 @@ export default defineConfig({
 
   // Shared test options
   use: {
-    headless: true,                     // run tests with browser UI visible
+    headless: true, // run tests with browser UI visible
     viewport: { width: 1920, height: 1080 },
-    ignoreHTTPSErrors: true,             // ignore SSL certificate errors
-    baseURL: process.env.BASE_UI_URL,    // base URL for relative page.goto calls
-    actionTimeout: 60000,                // maximum time for any action
-    screenshot: 'only-on-failure',       // capture screenshot only on failure
-    video: 'retain-on-failure',          // record video only on failure
-    trace: 'on-first-retry',             // capture trace for debugging flaky tests
+    ignoreHTTPSErrors: true, // ignore SSL certificate errors
+    baseURL: process.env.BASE_UI_URL, // base URL for relative page.goto calls
+    actionTimeout: 60000, // maximum time for any action
+    screenshot: 'only-on-failure', // capture screenshot only on failure
+    video: 'retain-on-failure', // record video only on failure
+    trace: 'on-first-retry', // capture trace for debugging flaky tests
   },
 
   // Browser projects (multi-browser testing)
-  projects: [
-    { name: 'chromium', use: { ...devices['Desktop Chrome'] } }
-  ],
+  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
 
   // Reporters for test results
   reporter: [
-    ['list'],                                             // console output
-    ['html', { outputFolder: 'playwright-report', open: 'never' }],  // HTML report
-    ['junit', { outputFile: path.join('results', 'junit.xml') }],   // JUnit report for CI
+    ['list'], // console output
+    ['html', { outputFolder: 'playwright-report', open: 'never' }], // HTML report
+    ['junit', { outputFile: path.join('results', 'junit.xml') }], // JUnit report for CI
   ],
 
   // Directory for storing test artifacts: screenshots, videos, logs
