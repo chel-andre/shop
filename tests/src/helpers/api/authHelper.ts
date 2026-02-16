@@ -1,6 +1,7 @@
 import { APIRequestContext, Page } from '@playwright/test';
 import bcrypt from 'bcryptjs';
 
+// Hash the password to match DB login requirement
 export const getPassword = (password: string) => {
   const salt = bcrypt.genSaltSync(10);
   const hashedPassword = bcrypt.hashSync(password, salt);
@@ -9,9 +10,9 @@ export const getPassword = (password: string) => {
 
 export async function login(
   request: APIRequestContext,
-  page: Page,
   username: string,
   password: string,
+  page?: Page,
 ) {
   const response = await request.post(`${process.env.BASE_API_URL}/login`, {
     data: { username, password: getPassword(password) },
@@ -26,8 +27,10 @@ export async function login(
   const body = await response.json();
   const token = body.token;
 
-  await page.goto(process.env.BASE_UI_URL!);
-  await page.evaluate((t) => localStorage.setItem('token', t), token);
+  if (page) {
+    await page.goto(process.env.BASE_UI_URL!);
+    await page.evaluate((t) => localStorage.setItem('token', t), token);
+  }
 
   return token;
 }

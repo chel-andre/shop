@@ -1,16 +1,7 @@
 import { test, expect } from '../src/fixtures/baseTest';
 import { generateRandomUsername, getRandomString } from '../src/helpers/random/randomDataHelper';
 import { dbHelper } from '../src/helpers/db/dbHelper';
-import bcrypt from 'bcryptjs';
-
-/* ----------------------------------------------------------
- * HELPER: hash password same as server
- * -------------------------------------------------------- */
-export const getPassword = (password: string) => {
-  const salt = bcrypt.genSaltSync(10);
-  const hashedPassword = bcrypt.hashSync(password, salt);
-  return hashedPassword;
-};
+import { getPassword } from '../src/helpers/api/authHelper';
 
 /* ----------------------------------------------------------
  * CONSTANTS

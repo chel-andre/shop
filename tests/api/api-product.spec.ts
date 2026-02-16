@@ -1,50 +1,21 @@
 import { test, expect, APIRequestContext } from '@playwright/test';
-import bcrypt from 'bcryptjs';
 import { dbHelper } from '../src/helpers/db/dbHelper';
 import {
   generateRandomUsername,
   getRandomString,
-  getRandomNumber,
+  generateProduct,
 } from '../src/helpers/random/randomDataHelper';
+import { login } from '../src/helpers/api/authHelper';
 import fs from 'fs';
 import path from 'path';
 
 /* ----------------------------------------------------------
- * HELPERS
+ * CONSTANTS
  * -------------------------------------------------------- */
-
-// Hash the password to match DB login requirement
-export const getPassword = (password: string) => {
-  const salt = bcrypt.genSaltSync(10);
-  return bcrypt.hashSync(password, salt);
+const MESSAGES = {
+  addProductSuccess: 'Product Added successfully.',
+  deleteProductSuccess: 'Product deleted.99999999999999',
 };
-
-// Login with hashed password and return token
-async function login(request: APIRequestContext, username: string, password: string) {
-  const response = await request.post(`${process.env.BASE_API_URL}/login`, {
-    data: { username, password: getPassword(password) },
-    headers: { 'Content-Type': 'application/json' },
-  });
-
-  if (!response.ok()) {
-    const body = await response.text();
-    throw new Error(`Login failed: ${response.status()} - ${body}`);
-  }
-
-  const body = await response.json();
-  return body.token;
-}
-
-// Generate product payload
-function generateProduct(overrides: any = {}) {
-  return {
-    name: `Product_${getRandomString()}`,
-    desc: `Desc_${getRandomString()}`,
-    price: getRandomNumber(500),
-    discount: getRandomNumber(50),
-    ...overrides,
-  };
-}
 
 /* ----------------------------------------------------------
  * TESTS
@@ -70,7 +41,7 @@ test.describe.parallel('API Product CRUD + Search + Pagination', () => {
   test.afterEach(async () => {
     // Clean up products and user
     if (user?._id) {
-      await dbHelper.deleteProductsByUser(user._id.toString());
+      await dbHelper.deleteProductsByUser(user._id);
       await dbHelper.deleteUserById(user._id);
     }
   });
@@ -92,7 +63,7 @@ test.describe.parallel('API Product CRUD + Search + Pagination', () => {
     const respBody = await response.json();
     expect(response.status()).toBe(200);
     expect(respBody.status).toBe(true);
-    expect(respBody.title).toBe('Product Added successfully.');
+    expect(respBody.title).toBe(MESSAGES.addProductSuccess);
   });
 
   test('Get product', async ({ request }) => {
@@ -110,6 +81,9 @@ test.describe.parallel('API Product CRUD + Search + Pagination', () => {
     expect(body.products[0].name).toBe(productData.name);
   });
 
+  // ---------------------------
+  // Intentionally failing test
+  // ---------------------------
   test('Delete product', async ({ request }) => {
     const productData = generateProduct({ user_id: user._id });
     const created = await dbHelper.createProduct(productData);
@@ -122,6 +96,6 @@ test.describe.parallel('API Product CRUD + Search + Pagination', () => {
     const body = await response.json();
     expect(response.status()).toBe(200);
     expect(body.status).toBe(true);
-    expect(body.title).toBe('Product deleted.99999999999999');
+    expect(body.title).toBe(MESSAGES.deleteProductSuccess);
   });
 });

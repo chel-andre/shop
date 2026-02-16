@@ -34,3 +34,14 @@ export const getRandomString = () => Date.now().toString(36) + Math.random().toS
 function getRandomElementFromArray<T>(array: T[]): T {
   return array[Math.floor(Math.random() * array.length)];
 }
+
+// Generates random product data with optional overrides
+export function generateProduct(overrides: any = {}) {
+  return {
+    name: `Product_${getRandomString()}`,
+    desc: `Desc_${getRandomString()}`,
+    price: getRandomNumber(500),
+    discount: getRandomNumber(50),
+    ...overrides,
+  };
+}

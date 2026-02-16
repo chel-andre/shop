@@ -3,6 +3,7 @@ import {
   generateRandomUsername,
   getRandomString,
   getRandomNumber,
+  generateProduct,
 } from '../src/helpers/random/randomDataHelper';
 
 import { dbHelper } from '../src/helpers/db/dbHelper';
@@ -26,17 +27,6 @@ const filePath = path.resolve(__dirname, '../assets/example.png');
 /* ----------------------------------------------------------
  * HELPERS
  * -------------------------------------------------------- */
-
-// Generates random product data with optional overrides
-function generateProduct(overrides: any = {}) {
-  return {
-    name: `Product ${getRandomString()}`,
-    desc: `Description ${getRandomString()}`,
-    price: getRandomNumber(500),
-    discount: getRandomNumber(50),
-    ...overrides,
-  };
-}
 
 // Generates random updated product data for edit test
 function generateUpdatedProduct() {
@@ -65,7 +55,7 @@ test.describe.parallel('Product CRUD', () => {
 
     // Insert user into DB and perform UI login
     user = await dbHelper.createUser(username, password);
-    await login(request, page, username, password);
+    await login(request, username, password, page);
 
     // Go to dashboard where product grid is displayed
     await page.goto('/dashboard');
@@ -74,7 +64,7 @@ test.describe.parallel('Product CRUD', () => {
   test.afterEach(async () => {
     // Cleanup: remove created products and user
     if (user?._id) {
-      await dbHelper.deleteProductsByUser(user._id.toString());
+      await dbHelper.deleteProductsByUser(user._id);
       await dbHelper.deleteUserById(user._id);
     }
   });

@@ -1,28 +1,12 @@
 import { test } from '../src/fixtures/baseTest';
 import {
+  generateProduct,
   generateRandomUsername,
   getRandomString,
-  getRandomNumber,
 } from '../src/helpers/random/randomDataHelper';
 
 import { dbHelper } from '../src/helpers/db/dbHelper';
 import { login } from '../src/helpers/api/authHelper';
-import path from 'path';
-
-const filePath = path.resolve(__dirname, '../assets/example.png');
-
-/* ----------------------------------------------------------
- * HELPERS
- * -------------------------------------------------------- */
-function generateProduct(overrides: any = {}) {
-  return {
-    name: `Product_${getRandomString()}`,
-    desc: `Desc_${getRandomString()}`,
-    price: getRandomNumber(500),
-    discount: getRandomNumber(50),
-    ...overrides,
-  };
-}
 
 /* ----------------------------------------------------------
  * TESTS
@@ -40,7 +24,7 @@ test.describe.parallel('Product Search & Pagination', () => {
     user = await dbHelper.createUser(username, password);
 
     // Login using API helper
-    await login(request, page, username, password);
+    await login(request, username, password, page);
 
     // Navigate to dashboard
     await page.goto('/dashboard');
@@ -49,7 +33,7 @@ test.describe.parallel('Product Search & Pagination', () => {
   test.afterEach(async () => {
     // Cleanup database after each test
     if (user?._id) {
-      await dbHelper.deleteProductsByUser(user._id.toString());
+      await dbHelper.deleteProductsByUser(user._id);
       await dbHelper.deleteUserById(user._id);
     }
   });

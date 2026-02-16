@@ -30,6 +30,6 @@ export const dbHelper = {
     image: string;
   }): Promise<IProduct> => ensureConnection(() => ProductModel.create(data)),
 
-  deleteProductsByUser: (user_id: string) =>
-    ensureConnection(() => ProductModel.deleteMany({ user_id })),
+  deleteProductsByUser: (userId: string) =>
+    ensureConnection(() => ProductModel.deleteMany({ user_id: userId })),
 };

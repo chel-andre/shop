@@ -32,9 +32,9 @@ test.describe.parallel('Login Flow', () => {
     await dbHelper.deleteUserByUsername(username);
   });
 
-  /* ----------------------------------------------------------
-   * Positive scenario: user can log in successfully
-   * -------------------------------------------------------- */
+  /* ----------------------------------------------------------------------------
+   * Positive scenario: user can log in successfully. Intentionally failing test
+   * ---------------------------------------------------------------------------- */
   test('Positive scenario — successful login', async ({ app }) => {
     // Navigate to login page
     await app.goToLogin();
