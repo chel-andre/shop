@@ -55,6 +55,7 @@ export class MainPage {
   }
 
   async getRowsCount(): Promise<number> {
+    await this.tableRows.first().waitFor();
     return await this.tableRows.count();
   }
 

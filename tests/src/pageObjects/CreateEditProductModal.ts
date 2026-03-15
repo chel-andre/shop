@@ -1,4 +1,5 @@
 import { Page, Locator } from '@playwright/test';
+import { IProduct } from '../models/Product';
 
 export class CreateEditProductModal {
   private readonly page: Page;
@@ -28,13 +29,13 @@ export class CreateEditProductModal {
     desc: string;
     price: number;
     discount: number;
-    filePath: string;
+    filePath?: string;
   }) {
     await this.nameInput.fill(data.name);
     await this.descInput.fill(data.desc);
     await this.priceInput.fill(String(data.price));
     await this.discountInput.fill(String(data.discount));
-    await this.uploadInput.setInputFiles(data.filePath);
+    await this.uploadInput.setInputFiles(data.filePath ?? '');
     await this.submit();
   }
 

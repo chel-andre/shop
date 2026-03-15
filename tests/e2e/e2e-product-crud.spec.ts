@@ -9,11 +9,11 @@ import {
 import { dbHelper } from '../src/helpers/db/dbHelper';
 import { login } from '../src/helpers/api/authHelper';
 import path from 'path';
+import { IUser } from '../src/models/User';
 
 /* ----------------------------------------------------------
  * CONSTANTS
  * -------------------------------------------------------- */
-// Notification messages used across CRUD tests
 const MESSAGES = {
   loginEmpty: 'There is no product!',
   added: 'Product Added successfully.',
@@ -46,7 +46,7 @@ function generateUpdatedProduct() {
 test.describe.parallel('Product CRUD', () => {
   let username: string;
   let password: string;
-  let user: any;
+  let user: IUser;
 
   test.beforeEach(async ({ app, request, page }) => {
     // Create unique user for test
@@ -77,14 +77,14 @@ test.describe.parallel('Product CRUD', () => {
     const productData = generateProduct({ filePath });
 
     // First notification appears because list is empty
-    await app.base.verifyAndCloseNotification(MESSAGES.loginEmpty, 'error');
+    await app.notification.verifyAndCloseNotification(MESSAGES.loginEmpty, 'error');
 
     // Open modal and create product
     await app.main.clickAddProduct();
     await app.productModal.fillForm(productData);
 
     // Verify creation notification
-    await app.base.verifyAndCloseNotification(MESSAGES.added, 'success');
+    await app.notification.verifyAndCloseNotification(MESSAGES.added, 'success');
 
     // Validate product row in table
     await app.main.verifyProductRow(productData);
@@ -109,7 +109,7 @@ test.describe.parallel('Product CRUD', () => {
     await app.productModal.fillForm(updated);
 
     // Verify update message
-    await app.base.verifyAndCloseNotification(MESSAGES.updated, 'success');
+    await app.notification.verifyAndCloseNotification(MESSAGES.updated, 'success');
 
     // Ensure row now shows updated product
     await app.main.verifyProductRow(updated);
@@ -133,7 +133,7 @@ test.describe.parallel('Product CRUD', () => {
     await app.main.clickDeleteByRow(0);
 
     // Verify notification after deletion
-    await app.base.verifyAndCloseNotification(MESSAGES.deleted, 'error');
+    await app.notification.verifyAndCloseNotification(MESSAGES.deleted, 'error');
 
     // Ensure deleted product no longer exists in list
     await app.main.verifyProductIsDeleted(created.name);

@@ -1,6 +1,6 @@
 import { Page, Locator, expect } from '@playwright/test';
 
-export class BasePage {
+export class NotificationPopup {
   readonly page: Page;
   readonly notificationOkButton: Locator;
   readonly notificationIcon: Locator;

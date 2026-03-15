@@ -7,6 +7,8 @@ import {
 
 import { dbHelper } from '../src/helpers/db/dbHelper';
 import { login } from '../src/helpers/api/authHelper';
+import { IUser } from '../src/models/User';
+import { IProduct } from '../src/models/Product';
 
 /* ----------------------------------------------------------
  * TESTS
@@ -15,7 +17,7 @@ import { login } from '../src/helpers/api/authHelper';
 test.describe.parallel('Product Search & Pagination', () => {
   let username: string;
   let password: string;
-  let user: any;
+  let user: IUser;
 
   test.beforeEach(async ({ app, request, page }) => {
     // Create a unique user for each test
@@ -26,7 +28,7 @@ test.describe.parallel('Product Search & Pagination', () => {
     // Login using API helper
     await login(request, username, password, page);
 
-    // Navigate to dashboard
+    // Go to dashboard where product grid is displayed
     await page.goto('/dashboard');
   });
 
@@ -42,7 +44,7 @@ test.describe.parallel('Product Search & Pagination', () => {
    * TEST: Search & Pagination
    * -------------------------------------------------------- */
   test('Search results + Pagination', async ({ page, app }) => {
-    const products: any[] = [];
+    const products: IProduct[] = [];
 
     // Create 10 products directly in the database
     for (let i = 1; i <= 10; i++) {
@@ -53,8 +55,11 @@ test.describe.parallel('Product Search & Pagination', () => {
       });
 
       await dbHelper.createProduct(p);
-      products.push(p);
+      products.push(p as IProduct);
     }
+
+    // Reload page to render created products
+    await page.reload();
 
     // Page 1 should contain 5 items
     const rowsCountPage1 = await app.main.getRowsCount();

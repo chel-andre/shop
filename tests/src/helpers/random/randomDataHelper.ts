@@ -1,3 +1,5 @@
+import { IProduct } from "../../models/Product";
+
 const names = [
   'John',
   'Emma',
@@ -36,7 +38,7 @@ function getRandomElementFromArray<T>(array: T[]): T {
 }
 
 // Generates random product data with optional overrides
-export function generateProduct(overrides: any = {}) {
+export function generateProduct(overrides: Partial<IProduct> & { filePath?: string } = {}) {
   return {
     name: `Product_${getRandomString()}`,
     desc: `Desc_${getRandomString()}`,

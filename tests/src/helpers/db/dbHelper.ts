@@ -18,18 +18,11 @@ export const dbHelper = {
   deleteUserByUsername: (username: string) =>
     ensureConnection(() => UserModel.deleteOne({ username })),
 
-  deleteUserById: (userId: string) => ensureConnection(() => UserModel.deleteOne({ _id: userId })),
+  deleteUserById: (userId: mongoose.Types.ObjectId) => ensureConnection(() => UserModel.deleteOne({ _id: userId })),
 
   // ---------------- PRODUCTS ----------------
-  createProduct: (data: {
-    name: string;
-    desc: string;
-    price: number;
-    discount: number;
-    user_id: mongoose.Types.ObjectId;
-    image: string;
-  }): Promise<IProduct> => ensureConnection(() => ProductModel.create(data)),
+  createProduct: (data: Partial<IProduct>): Promise<IProduct> => ensureConnection(() => ProductModel.create(data)),
 
-  deleteProductsByUser: (userId: string) =>
+  deleteProductsByUser: (userId: mongoose.Types.ObjectId) =>
     ensureConnection(() => ProductModel.deleteMany({ user_id: userId })),
 };

@@ -5,7 +5,6 @@ import { dbHelper } from '../src/helpers/db/dbHelper';
 /* ----------------------------------------------------------
  * CONSTANTS
  * -------------------------------------------------------- */
-// Notification messages for registration tests
 const MESSAGES = {
   registerSuccess: 'Registered Successfully.',
   userExists: (username: string) => `UserName ${username} Already Exist!`,
@@ -39,7 +38,7 @@ test.describe.parallel('Register Flow', () => {
     await app.register.register(username, password);
 
     // Verify the success notification appears
-    await app.base.verifyAndCloseNotification(MESSAGES.registerSuccess, 'success');
+    await app.notification.verifyAndCloseNotification(MESSAGES.registerSuccess, 'success');
   });
 
   /* ----------------------------------------------------------
@@ -58,6 +57,6 @@ test.describe.parallel('Register Flow', () => {
     await app.register.register(username, password);
 
     // Verify the error notification appears
-    await app.base.verifyAndCloseNotification(MESSAGES.userExists(username), 'error');
+    await app.notification.verifyAndCloseNotification(MESSAGES.userExists(username), 'error');
   });
 });

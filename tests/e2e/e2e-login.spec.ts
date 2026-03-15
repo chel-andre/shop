@@ -5,7 +5,6 @@ import { dbHelper } from '../src/helpers/db/dbHelper';
 /* ----------------------------------------------------------
  * CONSTANTS
  * -------------------------------------------------------- */
-// Notification messages for login tests
 const MESSAGES = {
   loginSuccess: 'There is no product!9999',
   invalidCredentials: 'Username or password is incorrect!',
@@ -36,27 +35,24 @@ test.describe.parallel('Login Flow', () => {
    * Positive scenario: user can log in successfully. Intentionally failing test
    * ---------------------------------------------------------------------------- */
   test('Positive scenario — successful login', async ({ app }) => {
-    // Navigate to login page
     await app.goToLogin();
 
-    // Perform login with valid credentials
     await app.login.login(username, password);
 
     // Verify that the login success notification appears
-    await app.base.verifyAndCloseNotification(MESSAGES.loginSuccess, 'error');
+    await app.notification.verifyAndCloseNotification(MESSAGES.loginSuccess, 'error');
   });
 
   /* ----------------------------------------------------------
    * Negative scenario: login fails with invalid credentials
    * -------------------------------------------------------- */
   test('Negative scenario — invalid login', async ({ app }) => {
-    // Navigate to login page
     await app.goToLogin();
 
     // Attempt login with incorrect password
     await app.login.login(username, password + 'wrong');
 
     // Verify that the error notification appears
-    await app.base.verifyAndCloseNotification(MESSAGES.invalidCredentials, 'error');
+    await app.notification.verifyAndCloseNotification(MESSAGES.invalidCredentials, 'error');
   });
 });

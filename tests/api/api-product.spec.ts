@@ -8,6 +8,7 @@ import {
 import { login } from '../src/helpers/api/authHelper';
 import fs from 'fs';
 import path from 'path';
+import { IUser } from '../src/models/User';
 
 /* ----------------------------------------------------------
  * CONSTANTS
@@ -25,14 +26,14 @@ test.describe.parallel('API Product CRUD + Search + Pagination', () => {
   let username: string;
   let password: string;
   let token: string;
-  let user: any;
+  let user: IUser;
   const filePath = path.resolve(__dirname, '../assets/example.png');
 
   test.beforeEach(async ({ request }) => {
     // Create user in DB with plain password
     username = generateRandomUsername();
     password = getRandomString();
-    user = await dbHelper.createUser(username, password); // plain password
+    user = await dbHelper.createUser(username, password);
 
     // Login using hashed password
     token = await login(request, username, password);

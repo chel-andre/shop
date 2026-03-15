@@ -14,8 +14,7 @@ export default defineConfig({
   // Retry failed tests once (useful for flaky tests)
   retries: 1,
 
-  // Global setup/teardown scripts (e.g., DB setup/cleanup)
-  globalSetup: require.resolve('./src/helpers/db/globalSetup'),
+  // Global teardown scripts (e.g., DB cleanup)
   globalTeardown: require.resolve('./src/helpers/db/globalTeardown'),
 
   // Shared test options
